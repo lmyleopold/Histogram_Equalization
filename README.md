@@ -39,6 +39,11 @@ To run the code provided in this project, you need to have the following install
 
 The project includes a command-line tool for applying different histogram equalization techniques to images. You can specify the input image, choose the desired method, and optionally plot the original and processed images along with their histograms.
 
+#### Install requirements
+```bash
+pip install -r requirements.txt
+```
+
 #### Command Structure
 
 ```bash

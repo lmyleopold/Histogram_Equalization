@@ -19,11 +19,11 @@ def main():
     
     # Process image
     if args.method == 'HE':
-        result_img_arr = histogram_equalization(img_arr)
+        result_img_arr = histogram_equalization(img_arr=img_arr)
     elif args.method == 'AHE':
-        result_img_arr = adaptive_histogram_equalization(img_arr)
+        result_img_arr = adaptive_histogram_equalization(img_arr=img_arr, window_size=160)
     elif args.method == 'CLAHE':
-        result_img_arr = contrast_limited_ahe(img_arr)
+        result_img_arr = contrast_limited_ahe(img_arr=img_arr, blocks=4, threshold=4)
     
     # Save image
     # Get the input file name and extension
@@ -38,13 +38,15 @@ def main():
         suffix = "_clahe"
     # Set the default output file name if not provided
     if not args.output:
-        args.output = f"images/output/{input_name}{suffix}{input_ext}"
+        args.output = f"images/sample_images_output/{input_name}{suffix}{input_ext}"
     save_image(result_img_arr, args.output)
     
     # Plot if needed
+
+    histogram_filename = f"images/histogram_output/{input_name}{suffix}_Histogram{input_ext}"
     if args.plot:
-        plot_histograms(img_arr, result_img_arr)
-        plot_images(img_arr, result_img_arr)
+        plot_histograms(original_img_arr=img_arr, result_img_arr=result_img_arr, filename=histogram_filename)
+        plot_images(original_img_arr=img_arr, result_img_arr=result_img_arr)
 
 if __name__ == "__main__":
     main()

@@ -14,17 +14,16 @@ def save_image(img_arr, filepath):
         img = img.convert('L')  # Convert to 8-bit grayscale mode
     img.save(filepath)
 
-
-def plot_histograms(original_img_arr, result_img_arr, level=256):
+def plot_histograms(original_img_arr, result_img_arr, filename, level=256):
     fig, axs = plt.subplots(1, 2, figsize=(12, 6))
 
     # Plot the original image's histogram
     axs[0].set_title("Original Image Histogram")
     hist, bins = np.histogram(original_img_arr.flatten(), level, [0, level])
     cdf = hist.cumsum()
-    cdf = (cdf - cdf.min()) * 255 / (cdf.max() - cdf.min())  # Normalize CDF
-    axs[0].hist(original_img_arr.flatten(), level, [0, level], color='r')
-    axs[0].plot(cdf, color='b', linewidth=2)
+    cdf_normalized = (cdf - cdf.min()) / (cdf.max() - cdf.min())  # Normalize CDF
+    axs[0].hist(original_img_arr.flatten(), level, [0, level], color='r', alpha=0.5)
+    axs[0].plot(cdf_normalized * hist.max(), color='b', linewidth=2)  # Scale CDF to match histogram scale
     axs[0].set_xlim([0, level])
     axs[0].legend(('CDF', 'Histogram'), loc='upper left')
 
@@ -32,13 +31,13 @@ def plot_histograms(original_img_arr, result_img_arr, level=256):
     axs[1].set_title("Result Image Histogram")
     hist, bins = np.histogram(result_img_arr.flatten(), level, [0, level])
     cdf = hist.cumsum()
-    cdf = (cdf - cdf.min()) * 255 / (cdf.max() - cdf.min())  # Normalize CDF
-    axs[1].hist(result_img_arr.flatten(), level, [0, level], color='r')
-    axs[1].plot(cdf, color='b', linewidth=2)
+    cdf_normalized = (cdf - cdf.min()) / (cdf.max() - cdf.min())  # Normalize CDF
+    axs[1].hist(result_img_arr.flatten(), level, [0, level], color='r', alpha=0.5)
+    axs[1].plot(cdf_normalized * hist.max(), color='b', linewidth=2)  # Scale CDF to match histogram scale
     axs[1].set_xlim([0, level])
     axs[1].legend(('CDF', 'Histogram'), loc='upper left')
 
-    plt.show()
+    plt.savefig(filename, bbox_inches='tight')
 
 
 def plot_images(original_img_arr, result_img_arr):
@@ -53,5 +52,3 @@ def plot_images(original_img_arr, result_img_arr):
     plt.title("Processed Image")
     plt.imshow(result_img_arr, cmap='gray')
     plt.axis('off')
-
-    plt.show()
